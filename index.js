@@ -30,6 +30,13 @@ async function run() {
 
         const itemCollection = client.db('ArtisanAura').collection('allItem')
 
+        app.get('/items', async (req, res) => {
+            const cursor =await itemCollection.find();
+            const result = await cursor.toArray()
+            console.log(result)
+            res.send(result)
+        })
+
         app.post('/items', async (req, res) => {
             const item = req.body;
             console.log(item)
