@@ -42,9 +42,35 @@ async function run() {
             res.send(result)
         })
 
+
+        app.put('/items', async (req, res) => {
+            const item = req.body;
+            const id = item.id;
+
+            const filter = { _id: new ObjectId(id) }
+            const options = { upsert: true };
+            const updatedItem = {
+                $set: {
+                    item_name: item.item_name,
+                    image: item.image,
+                    subcategory_name: item.subcategory_name,
+                    price: item.price,
+                    rating: item.rating,
+                    customization: item.customization,
+                    processing_time: item.processing_time,
+                    userEmail: item.userEmail,
+                    userName: item.userName,
+                    shortDescription: item.shortDescription
+                }
+            }
+
+            const result = await itemCollection.updateOne(filter, updatedItem, options)
+            res.send(result)
+        })
+
         app.get('/items/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const result = await itemCollection.findOne(query)
             res.send(result)
         })
