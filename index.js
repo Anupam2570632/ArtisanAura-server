@@ -29,9 +29,16 @@ async function run() {
         // await client.connect();
 
         const itemCollection = client.db('ArtisanAura').collection('allItem')
+        const categoryCollection = client.db('ArtisanAura').collection('category')
 
         app.get('/items', async (req, res) => {
-            const cursor = await itemCollection.find();
+            const cursor = itemCollection.find();
+            const result = await cursor.toArray()
+            res.send(result)
+        })
+
+        app.get('/category', async(re, res)=>{
+            const cursor = categoryCollection.find();
             const result = await cursor.toArray()
             res.send(result)
         })
@@ -65,6 +72,13 @@ async function run() {
             }
 
             const result = await itemCollection.updateOne(filter, updatedItem, options)
+            res.send(result)
+        })
+
+        app.delete('/items/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await itemCollection.deleteOne(query)
             res.send(result)
         })
 
