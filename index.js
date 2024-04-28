@@ -37,8 +37,15 @@ async function run() {
             res.send(result)
         })
 
-        app.get('/category', async(re, res)=>{
+        app.get('/category', async (req, res) => {
             const cursor = categoryCollection.find();
+            const result = await cursor.toArray()
+            res.send(result)
+        })
+        app.get('/items/:subcategory_name', async (req, res) => {
+            const subcategory_name = req.params.subcategory_name;
+            const query = { subcategory_name: subcategory_name }
+            const cursor = itemCollection.find(query)
             const result = await cursor.toArray()
             res.send(result)
         })
